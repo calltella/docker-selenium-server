@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+  seleniumhub:
+    image: selenium/hub:latest
+    container_name: seleniumhub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+
+  seleniumhub-test:
+    container_name: seleniumhub-test
+    build:
+      context: .
+      dockerfile: ./selenium-test.Dockerfile
+    volumes:
+      - ./src:/src
+    tty: true
+
+  seleniumhub-firefox:
+    container_name: seleniumhub-firefox
+    image: selenium/node-firefox
+    restart: unless-stopped
+    shm_size: 2gb
+    ports:
+      - 7901:7900
+    environment:
+      VNC_NO_PASSWORD: 1
+      SE_EVENT_BUS_HOST: seleniumhub
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+    depends_on:
+      - seleniumhub
+
+  seleniumhub-chrome:
+    container_name: seleniumhub-chrome
+    build:
+      context: .
+      dockerfile: ./selenium-chrome.Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./src:/src
+    shm_size: 2gb
+    ports:
+      - 7902:7900
+    environment:
+      # CHROME_DRIVER_VERSION: 101.0.4951.15
+      VNC_NO_PASSWORD: 1
+      SE_EVENT_BUS_HOST: seleniumhub
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+    depends_on:
+      - seleniumhub
+
+  seleniumhub-chrome-video:
+    image: selenium/video:latest
+    volumes:
+      - ./videos:/videos
+    depends_on:
+      - seleniumhub-chrome
+    environment:
+      - DISPLAY_CONTAINER_NAME=seleniumhub-chrome
+      - FILE_NAME=seleniumhub-chrome.mp4
