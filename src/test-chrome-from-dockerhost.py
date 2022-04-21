@@ -54,7 +54,7 @@ def main():
 
         # 検索結果のリンクが１つ以上あったら、ランダムにクリックする
         if links_search_result:
-            links_search_result[random.choice(range(len(links_search_result)))].click()
+            links_search_result[random.randint(0, len(links_search_result)-1)].click()
     finally:
         driver.quit()
 
