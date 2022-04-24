@@ -7,10 +7,6 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-options = webdriver.ChromeOptions()
-mobile_emulation = {"deviceName": "iPhone X"}
-options.add_experimental_option("mobileEmulation", mobile_emulation)
-
 def main():
     options = webdriver.ChromeOptions()
     driver = webdriver.Remote(
