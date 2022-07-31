@@ -1,0 +1,26 @@
+version: '3.6'
+services:
+    chrome:
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        restart: '${DOCKER_RESTART:-no}'
+        ports:
+            - 4444:4444
+            - 7900:5900
+        volumes:
+            - /dev/shm:/dev/shm
+            - /etc/localtime:/etc/localtime:ro
+            - 'chrome-cache:/home/seluser'
+        environment:
+            - SCREEN_WIDTH=1280
+            - SCREEN_HEIGHT=900
+networks:
+    default:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.10.64/27
+volumes:
+    chrome-cache:
