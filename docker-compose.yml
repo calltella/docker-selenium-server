@@ -4,7 +4,7 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile
-        restart: '${DOCKER_RESTART:-no}'
+        restart: ${DOCKER_RESTART:-no}
         ports:
             - 4444:4444
             - 7900:5900
@@ -13,8 +13,8 @@ services:
             - /etc/localtime:/etc/localtime:ro
             - 'chrome-cache:/home/seluser'
         environment:
-            - SCREEN_WIDTH=1280
-            - SCREEN_HEIGHT=900
+            - SCREEN_WIDTH=${SCREEN_WIDTH:-1360}
+            - SCREEN_HEIGHT=${SCREEN_HEIGHT:-900}
 networks:
     default:
         driver: bridge
