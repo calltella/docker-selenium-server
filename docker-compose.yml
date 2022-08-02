@@ -7,7 +7,7 @@ services:
         restart: ${DOCKER_RESTART:-no}
         ports:
             - 4444:4444
-            - 7900:5900
+            - ${DOCKER_VNC_PORT:-7900}:5900
         volumes:
             - /dev/shm:/dev/shm
             - /etc/localtime:/etc/localtime:ro
